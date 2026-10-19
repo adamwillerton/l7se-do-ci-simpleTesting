@@ -1,0 +1,35 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  testing:
+    name: Check and test website
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install testing and linting tools
+        run: npm install
+
+      - name: Check HTML
+        run: npx htmlhint website/index.html
+
+      - name: Check CSS
+        run: npx stylelint website/style.css --fix
+
+      - name: Check JavaScript syntax
+        run: node --check website/script.js
+
+      - name: Run Jest unit tests
+        run: npm test
